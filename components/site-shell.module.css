@@ -2,7 +2,7 @@
 .regionTabs {
   position: relative;
   display: flex;
-  width: min(100%, 1008px);
+  width: 100%;
   max-width: 100%;
   gap: 3px;
   overflow-x: auto;
