@@ -1166,16 +1166,21 @@
   overscroll-behavior: contain;
   scroll-behavior: smooth;
   scrollbar-width: thin;
+  scrollbar-color: rgba(80, 80, 80, 0.8) rgba(0, 0, 0, 0.2);
 }
 
 .tierColumnRows::-webkit-scrollbar {
   width: 7px;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .tierColumnRows::-webkit-scrollbar-thumb {
-  background: rgba(148, 139, 165, 0.22);
+  background: rgba(80, 80, 80, 0.8);
   border-radius: 8px;
+}
+
+.tierColumnRows::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.9);
 }
 
 .tierColumnRow {
