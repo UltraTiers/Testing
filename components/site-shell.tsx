@@ -221,6 +221,7 @@ function useDebouncedValue(value: string, delay: number) {
   return debouncedValue;
 }
 
+
 export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isLoading, setIsLoading] = useState(initialPlayers.length === 0);
@@ -229,6 +230,8 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
   const [activeMode, setActiveMode] = useState<ModeFilter>("all");
   const [pendingGroup, setPendingGroup] = useState<ModeGroupKey>("global");
   const [pendingMode, setPendingMode] = useState<ModeFilter>("all");
+  const [activeRegion, setActiveRegion] = useState<string>("combined");
+  const [pendingRegion, setPendingRegion] = useState<string>("combined");
   const [isRevealing, setIsRevealing] = useState(false);
   const [query, setQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -250,10 +253,12 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
   const activeModeIndex = Math.max(0, visibleModes.indexOf(pendingMode));
   const sliderIndex = Math.min(activeModeIndex, Math.max(0, visibleModes.length - 1));
 
-  const applyFilterChange = (group: ModeGroupKey, mode: ModeFilter) => {
+
+  const applyFilterChange = (group: ModeGroupKey, mode: ModeFilter, region?: string) => {
     setActiveGroup(group);
     setActiveMode(mode);
     setVisibleRows(rowBatchSize);
+    if (region) setActiveRegion(region);
   };
 
   const revealBoard = () => {
@@ -268,16 +273,18 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
     }, 160);
   };
 
-  const queueFilterChange = (group: ModeGroupKey, mode: ModeFilter) => {
+  const queueFilterChange = (group: ModeGroupKey, mode: ModeFilter, region?: string) => {
     const now = Date.now();
     loadAttempts.current = [...loadAttempts.current.filter((time) => now - time <= spamWindowMs), now];
 
+
     setPendingGroup(group);
     setPendingMode(mode);
+    if (region) setPendingRegion(region);
     window.requestAnimationFrame(() => {
       modeTabRefs.current[mode]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
     });
-    applyFilterChange(group, mode);
+    applyFilterChange(group, mode, region);
     revealBoard();
 
     if (switchTimeout.current) {
@@ -359,8 +366,13 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
     return () => scroller.removeEventListener("wheel", onWheel);
   }, [visibleModes]);
 
+
   const rankedPlayers = useMemo(() => {
-    return players
+    let filtered = players;
+    if (activeGroup === "global" && activeRegion !== "combined") {
+      filtered = players.filter((player) => player.region?.toUpperCase() === activeRegion.toUpperCase());
+    }
+    return filtered
       .map((player) => {
         const scopedPoints =
           activeMode === "all"
@@ -385,7 +397,8 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
 
         return left.name.localeCompare(right.name);
       });
-  }, [activeGroup, activeMode, playerIndexes, players]);
+  }, [activeGroup, activeMode, activeRegion, playerIndexes, players]);
+
 
   const isSingleMode = activeMode !== "all";
   const displayPlayers = useMemo(() => {
@@ -535,7 +548,30 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
         </section>
       </nav>
 
+
       <section className={styles.boardTabs}>
+        {/* Region selector for Global tab */}
+        {pendingGroup === "global" && (
+          <div className={styles.regionTabs} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+            {["combined", "EU", "NA", "ME", "AS", "SA", "AU", "AF"].map((region) => (
+              <button
+                key={region}
+                type="button"
+                onClick={() => {
+                  setPendingRegion(region);
+                  queueFilterChange("global", pendingMode, region);
+                }}
+                className={
+                  styles.regionTab +
+                  (pendingRegion === region ? " " + styles.regionTabActive : "")
+                }
+                style={{ padding: "4px 12px", borderRadius: 8, border: 0, background: pendingRegion === region ? "#222" : "#111", color: "#fff", fontWeight: 500, cursor: "pointer" }}
+              >
+                {region === "combined" ? "Combined" : region}
+              </button>
+            ))}
+          </div>
+        )}
         <div
           ref={modeScrollerRef}
           className={styles.modeTabs}
@@ -555,7 +591,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
                   modeTabRefs.current[mode] = element;
                 }}
                 type="button"
-                onClick={() => queueFilterChange(pendingGroup, mode)}
+                onClick={() => queueFilterChange(pendingGroup, mode, pendingRegion)}
                 className={`${styles.modeTab} ${pendingMode === mode ? styles.modeTabActive : ""}`}
               >
                 <ModeTabIcon mode={mode} />
