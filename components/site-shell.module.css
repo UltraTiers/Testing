@@ -1,3 +1,55 @@
+/* Region Tabs for Global Leaderboard */
+.regionTabs {
+  position: relative;
+  display: flex;
+  width: min(100%, 1008px);
+  max-width: 100%;
+  gap: 3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(13, 11, 22, 0.68);
+  backdrop-filter: blur(20px);
+  padding: 4px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  scroll-behavior: smooth;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.regionTab {
+  position: relative;
+  display: inline-flex;
+  width: 112px;
+  min-width: 112px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 10px 14px;
+  color: #8e879c;
+  font-weight: 900;
+  font-size: 17px;
+  white-space: nowrap;
+  transition: color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.regionTab:hover {
+  color: #ffffff;
+}
+
+.regionTabActive {
+  border-color: transparent;
+  background: rgba(255,255,255,0.11);
+  color: #f6f2fb;
+  box-shadow: none;
+  animation: tabBounce 360ms cubic-bezier(0.2, 1.35, 0.34, 1);
+}
 .page {
   margin: 0 auto;
   display: flex;
