@@ -1118,7 +1118,7 @@
 
 .tierColumn {
   min-width: 210px;
-  overflow: visible;
+  overflow: hidden;
   border-radius: 20px;
   background: linear-gradient(180deg, rgba(18, 17, 24, 0.72), rgba(12, 11, 17, 0.56));
   border: 1px solid rgba(255, 255, 255, 0.055);
@@ -1161,22 +1161,23 @@
   display: grid;
   gap: 4px;
   padding: 6px;
+  max-height: 500px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  /* Uses the current height set by the parent or grid, so no max-height is set here */
 }
 
-  /* Optional: Webkit scrollbar styling for .tierColumnRows */
-  .tierColumnRows::-webkit-scrollbar {
-    width: 7px;
-    background: transparent;
-  }
-  .tierColumnRows::-webkit-scrollbar-thumb {
-    background: rgba(148, 139, 165, 0.22);
-    border-radius: 8px;
-  }
+.tierColumnRows::-webkit-scrollbar {
+  width: 7px;
+  background: transparent;
+}
+
+.tierColumnRows::-webkit-scrollbar-thumb {
+  background: rgba(148, 139, 165, 0.22);
+  border-radius: 8px;
+}
+
 .tierColumnRow {
   --region-bg: rgba(57, 181, 74, 0.24);
   --region-border: rgba(138, 247, 154, 0.18);
