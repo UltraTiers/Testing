@@ -396,6 +396,26 @@
   background: rgba(13, 12, 20, 0.52);
   backdrop-filter: blur(24px);
   box-shadow: 0 0 28px rgba(255, 255, 255, 0.06), 0 18px 44px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  scrollbar-color: rgba(148, 139, 165, 0.55) rgba(255, 255, 255, 0.055);
+  scrollbar-width: thin;
+}
+
+.boardTabs .modeTabs::-webkit-scrollbar,
+.boardTabs .regionTabs::-webkit-scrollbar {
+  height: 9px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.boardTabs .modeTabs::-webkit-scrollbar-thumb,
+.boardTabs .regionTabs::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid rgba(10, 9, 16, 0.82);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+}
+
+.boardTabs .modeTabs::-webkit-scrollbar-thumb:hover,
+.boardTabs .regionTabs::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.15));
 }
 
 .modeTab {
