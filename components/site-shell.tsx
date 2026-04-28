@@ -550,59 +550,60 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
 
 
       <section className={styles.boardTabs}>
-        {/* Region selector for Global tab */}
-        {pendingGroup === "global" && (
-          <div className={styles.regionTabs} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+        {/* For Global tab, show region selector in place of mode buttons */}
+        {pendingGroup === "global" ? (
+          <div className={styles.regionTabs} style={{ display: "flex", gap: 8, marginBottom: 0, marginTop: 4, justifyContent: "flex-start" }}>
             {["combined", "EU", "NA", "ME", "AS", "SA", "AU", "AF"].map((region) => (
               <button
                 key={region}
                 type="button"
                 onClick={() => {
                   setPendingRegion(region);
-                  queueFilterChange("global", pendingMode, region);
+                  queueFilterChange("global", "all", region);
                 }}
                 className={
                   styles.regionTab +
                   (pendingRegion === region ? " " + styles.regionTabActive : "")
                 }
-                style={{ padding: "4px 12px", borderRadius: 8, border: 0, background: pendingRegion === region ? "#222" : "#111", color: "#fff", fontWeight: 500, cursor: "pointer" }}
+                style={{ padding: "12px 18px", borderRadius: 12, border: 0, background: pendingRegion === region ? "#222" : "#111", color: "#fff", fontWeight: 600, fontSize: 18, cursor: "pointer", minWidth: 90 }}
               >
                 {region === "combined" ? "Combined" : region}
               </button>
             ))}
           </div>
+        ) : (
+          <div
+            ref={modeScrollerRef}
+            className={styles.modeTabs}
+            style={
+              {
+                "--active-index": sliderIndex,
+                "--tab-count": visibleModes.length,
+              } as React.CSSProperties
+            }
+          >
+            <span className={styles.modeTabSlider} aria-hidden="true" />
+            {visibleModes.map((mode) => {
+              return (
+                <button
+                  key={mode}
+                  ref={(element) => {
+                    modeTabRefs.current[mode] = element;
+                  }}
+                  type="button"
+                  onClick={() => queueFilterChange(pendingGroup, mode, pendingRegion)}
+                  className={`${styles.modeTab} ${pendingMode === mode ? styles.modeTabActive : ""}`}
+                >
+                  <ModeTabIcon mode={mode} />
+                  <span className={styles.modeIcon}>
+                    <img src={getModeIconPath(mode)} alt="" className={styles.modeIconImage} />
+                  </span>
+                  <span className={styles.modeLabel}>{mode === "all" ? "Overall" : mode}</span>
+                </button>
+              );
+            })}
+          </div>
         )}
-        <div
-          ref={modeScrollerRef}
-          className={styles.modeTabs}
-          style={
-            {
-              "--active-index": sliderIndex,
-              "--tab-count": visibleModes.length,
-            } as React.CSSProperties
-          }
-        >
-          <span className={styles.modeTabSlider} aria-hidden="true" />
-          {visibleModes.map((mode) => {
-            return (
-              <button
-                key={mode}
-                ref={(element) => {
-                  modeTabRefs.current[mode] = element;
-                }}
-                type="button"
-                onClick={() => queueFilterChange(pendingGroup, mode, pendingRegion)}
-                className={`${styles.modeTab} ${pendingMode === mode ? styles.modeTabActive : ""}`}
-              >
-                <ModeTabIcon mode={mode} />
-                <span className={styles.modeIcon}>
-                  <img src={getModeIconPath(mode)} alt="" className={styles.modeIconImage} />
-                </span>
-                <span className={styles.modeLabel}>{mode === "all" ? "Overall" : mode}</span>
-              </button>
-            );
-          })}
-        </div>
       </section>
 
       <section className={`glass ${styles.board}`}>
