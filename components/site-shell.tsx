@@ -379,7 +379,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
     }
     return filtered
       .map((player) => {
-        // Always use global points for ranking, regardless of active group/mode
+        // Get global points for modal position display
         const globalPoints = playerIndexes.groupPointsByPlayer.get(player.uuid)?.["global"] ?? 0;
         
         const scopedPoints =
@@ -399,8 +399,8 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
       })
       .filter((player) => player.scopedPoints > 0 || player.scopedTiers.length > 0)
       .sort((left, right) => {
-        // Always rank by global points
-        const pointsDiff = right.globalPoints - left.globalPoints;
+        // Rank by category points (scopedPoints)
+        const pointsDiff = right.scopedPoints - left.scopedPoints;
         if (pointsDiff !== 0) {
           return pointsDiff;
         }
@@ -408,6 +408,24 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
         return left.name.localeCompare(right.name);
       });
   }, [activeGroup, activeMode, activeRegion, playerIndexes, players]);
+
+
+  // Global leaderboard for modal position display
+  const globalLeaderboard = useMemo(() => {
+    return [...players]
+      .map((player) => {
+        const globalPoints = playerIndexes.groupPointsByPlayer.get(player.uuid)?.["global"] ?? 0;
+        return { ...player, globalPoints };
+      })
+      .filter((player) => player.globalPoints > 0)
+      .sort((left, right) => {
+        const pointsDiff = right.globalPoints - left.globalPoints;
+        if (pointsDiff !== 0) {
+          return pointsDiff;
+        }
+        return left.name.localeCompare(right.name);
+      });
+  }, [playerIndexes, players]);
 
 
   const isSingleMode = activeMode !== "all";
@@ -751,7 +769,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
         <Suspense fallback={null}>
           <PlayerModal
             player={selectedPlayer}
-            rank={rankedPlayers.findIndex((player) => player.uuid === selectedPlayer.uuid) + 1}
+            rank={globalLeaderboard.findIndex((player) => player.uuid === selectedPlayer.uuid) + 1}
             onClose={() => setSelectedPlayer(null)}
           />
         </Suspense>
