@@ -15,6 +15,26 @@
   scroll-behavior: smooth;
   margin-bottom: 0;
   margin-top: 0;
+  --tab-width: 98px;
+  --tab-gap: 3px;
+}
+
+.regionTabSlider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: var(--tab-width);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateX(min(
+    calc(var(--active-index) * (var(--tab-width) + var(--tab-gap))),
+    calc((var(--tab-count) - 1) * (var(--tab-width) + var(--tab-gap)))
+  ));
+  transition: transform 360ms cubic-bezier(0.2, 1.35, 0.34, 1);
+  pointer-events: none;
 }
 
 .regionTab {
@@ -43,11 +63,8 @@
 }
 
 .regionTabActive {
-  border-color: transparent;
-  background: rgba(255,255,255,0.11);
   color: #f6f2fb;
   box-shadow: none;
-  animation: tabBounce 360ms cubic-bezier(0.2, 1.35, 0.34, 1);
 }
 
 .regionTabIcon {
@@ -311,7 +328,7 @@
   gap: var(--tab-gap);
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 11px;
+  border-radius: 11px 11px 0px 0px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(13, 11, 22, 0.68);
   backdrop-filter: blur(20px);

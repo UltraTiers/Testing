@@ -252,6 +252,11 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
   const normalizedQuery = deferredQuery.trim().toLowerCase();
   const activeModeIndex = Math.max(0, visibleModes.indexOf(pendingMode));
   const sliderIndex = Math.min(activeModeIndex, Math.max(0, visibleModes.length - 1));
+  const regionList = ["combined", "EU", "NA", "ME", "AS", "SA", "AU", "AF"] as const;
+  const activeRegionIndex = regionList.indexOf(pendingRegion as typeof regionList[number]);
+  const regionSliderIndex = activeRegionIndex >= 0 
+    ? Math.min(activeRegionIndex, Math.max(0, regionList.length - 1))
+    : 0;
 
 
   const applyFilterChange = (group: ModeGroupKey, mode: ModeFilter, region?: string) => {
@@ -552,8 +557,17 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
       <section className={styles.boardTabs}>
         {/* For Global tab, show region selector in place of mode buttons */}
         {pendingGroup === "global" ? (
-          <div className={styles.regionTabs}>
-            {["combined", "EU", "NA", "ME", "AS", "SA", "AU", "AF"].map((region) => (
+          <div
+            className={styles.regionTabs}
+            style={
+              {
+                "--active-index": regionSliderIndex,
+                "--tab-count": regionList.length,
+              } as React.CSSProperties
+            }
+          >
+            <span className={styles.regionTabSlider} aria-hidden="true" />
+            {regionList.map((region) => (
               <button
                 key={region}
                 type="button"
