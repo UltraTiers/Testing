@@ -1,7 +1,7 @@
 "use client";
 
 import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronUp, ChevronsUp, Loader2, Search, ShoppingBag, Trophy, X } from "lucide-react";
+import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X } from "lucide-react";
 import { fetchPlayers, type Player, type PlayerTier } from "@/lib/api";
 import { groupLabels, modeGroups, type ModeGroupKey, tierScores } from "@/lib/modes";
 import styles from "./site-shell.module.css";
@@ -552,7 +552,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
       <section className={styles.boardTabs}>
         {/* For Global tab, show region selector in place of mode buttons */}
         {pendingGroup === "global" ? (
-          <div className={styles.regionTabs} style={{ display: "flex", gap: 8, marginBottom: 0, marginTop: 4, justifyContent: "flex-start" }}>
+          <div className={styles.regionTabs}>
             {["combined", "EU", "NA", "ME", "AS", "SA", "AU", "AF"].map((region) => (
               <button
                 key={region}
@@ -565,9 +565,9 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
                   styles.regionTab +
                   (pendingRegion === region ? " " + styles.regionTabActive : "")
                 }
-                style={{ padding: "12px 18px", borderRadius: 12, border: 0, background: pendingRegion === region ? "#222" : "#111", color: "#fff", fontWeight: 600, fontSize: 18, cursor: "pointer", minWidth: 90 }}
               >
-                {region === "combined" ? "Combined" : region}
+                <Globe size={15} aria-hidden="true" className={styles.regionTabIcon} />
+                <span className={styles.regionLabel}>{region === "combined" ? "Overall" : region}</span>
               </button>
             ))}
           </div>
