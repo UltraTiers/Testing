@@ -379,6 +379,9 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
     }
     return filtered
       .map((player) => {
+        // Always use global points for ranking, regardless of active group/mode
+        const globalPoints = playerIndexes.groupPointsByPlayer.get(player.uuid)?.["global"] ?? 0;
+        
         const scopedPoints =
           activeMode === "all"
             ? playerIndexes.groupPointsByPlayer.get(player.uuid)?.[activeGroup] ?? 0
@@ -386,6 +389,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
 
         return {
           ...player,
+          globalPoints,
           scopedPoints,
           scopedTiers:
             activeMode === "all"
@@ -395,7 +399,8 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
       })
       .filter((player) => player.scopedPoints > 0 || player.scopedTiers.length > 0)
       .sort((left, right) => {
-        const pointsDiff = right.scopedPoints - left.scopedPoints;
+        // Always rank by global points
+        const pointsDiff = right.globalPoints - left.globalPoints;
         if (pointsDiff !== 0) {
           return pointsDiff;
         }
