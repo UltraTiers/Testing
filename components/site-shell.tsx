@@ -210,6 +210,17 @@ const spamWindowMs = 3000;
 const spamLoadLimit = 5;
 const spamCooldownMs = 2000;
 
+function getPlayerTitle(points: number): string {
+  if (points >= 400) return "Combat Grandmaster";
+  if (points >= 250) return "Combat Master";
+  if (points >= 100) return "Combat Ace";
+  if (points >= 50) return "Combat Specialist";
+  if (points >= 20) return "Combat Cadet";
+  if (points >= 10) return "Combat Novice";
+  if (points >= 1) return "Combat Rookie";
+  return "Unranked";
+}
+
 function useDebouncedValue(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -709,7 +720,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
                       alt=""
                       className={styles.sublineIcon}
                     />
-                    {index === 0 ? "Combat Master" : `${player.points} points`}
+                    {getPlayerTitle(player.globalPoints)}
                   </p>
                 </div>
               </div>
