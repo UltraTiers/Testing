@@ -566,7 +566,11 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
                   (pendingRegion === region ? " " + styles.regionTabActive : "")
                 }
               >
-                <Globe size={15} aria-hidden="true" className={styles.regionTabIcon} />
+                {region === "combined" ? (
+                  <Trophy size={15} aria-hidden="true" className={styles.regionTabIcon} />
+                ) : (
+                  <Globe size={15} aria-hidden="true" className={styles.regionTabIcon} />
+                )}
                 <span className={styles.regionLabel}>{region === "combined" ? "Overall" : region}</span>
               </button>
             ))}
