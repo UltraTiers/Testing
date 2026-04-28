@@ -1161,9 +1161,22 @@
   display: grid;
   gap: 4px;
   padding: 6px;
-  overflow: visible;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  /* Uses the current height set by the parent or grid, so no max-height is set here */
 }
 
+  /* Optional: Webkit scrollbar styling for .tierColumnRows */
+  .tierColumnRows::-webkit-scrollbar {
+    width: 7px;
+    background: transparent;
+  }
+  .tierColumnRows::-webkit-scrollbar-thumb {
+    background: rgba(148, 139, 165, 0.22);
+    border-radius: 8px;
+  }
 .tierColumnRow {
   --region-bg: rgba(57, 181, 74, 0.24);
   --region-border: rgba(138, 247, 154, 0.18);
