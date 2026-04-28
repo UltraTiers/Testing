@@ -781,6 +781,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
           <PlayerModal
             player={selectedPlayer}
             rank={globalLeaderboard.findIndex((player) => player.uuid === selectedPlayer.uuid) + 1}
+            globalPoints={globalLeaderboard.find((player) => player.uuid === selectedPlayer.uuid)?.globalPoints ?? 0}
             onClose={() => setSelectedPlayer(null)}
           />
         </Suspense>
@@ -918,7 +919,7 @@ function LegacyPlayerModal({
           />
           <h3 className={`display-font ${styles.modalName}`}>{player.name}</h3>
           <div className={styles.modalMetaRow}>
-            <div className={styles.modalTag}>Combat {player.points >= 300 ? "Grandmaster" : player.points >= 200 ? "Master" : "Ace"}</div>
+            <div className={styles.modalTag}>{getPlayerTitle(player.globalPoints)}</div>
             <p className={`${styles.modalRegion} ${getRegionClass(player.region)}`}>{player.region}</p>
             <a
               href={`https://namemc.com/profile/${player.name}`}

@@ -6,6 +6,17 @@ import type { Player, PlayerTier } from "@/lib/api";
 import { tierScores } from "@/lib/modes";
 import styles from "./site-shell.module.css";
 
+function getPlayerTitle(points: number): string {
+  if (points >= 400) return "Combat Grandmaster";
+  if (points >= 250) return "Combat Master";
+  if (points >= 100) return "Combat Ace";
+  if (points >= 50) return "Combat Specialist";
+  if (points >= 20) return "Combat Cadet";
+  if (points >= 10) return "Combat Novice";
+  if (points >= 1) return "Combat Rookie";
+  return "Unranked";
+}
+
 const tierPalette: Record<string, string> = {
   HT1: styles.tierHt1,
   LT1: styles.tierLt1,
@@ -126,14 +137,17 @@ function TierBadge({ entry, retired = false }: { entry: PlayerTier; retired?: bo
 export default function PlayerModal({
   player,
   rank,
+  globalPoints,
   onClose,
 }: {
   player: Player;
   rank: number;
+  globalPoints: number;
   onClose: () => void;
 }) {
   const rankedModes = sortTiers(player.tiers.filter((entry) => entry.tier !== "Unknown"));
   const topPlacement = player.points;
+  const playerTitle = getPlayerTitle(globalPoints);
 
   return (
     <div className={styles.modalBackdrop} onClick={onClose}>
@@ -151,7 +165,7 @@ export default function PlayerModal({
           />
           <h3 className={`display-font ${styles.modalName}`}>{player.name}</h3>
           <div className={styles.modalMetaRow}>
-            <div className={styles.modalTag}>Combat {player.points >= 300 ? "Grandmaster" : player.points >= 200 ? "Master" : "Ace"}</div>
+            <div className={styles.modalTag}>{playerTitle}</div>
             <p className={`${styles.modalRegion} ${getRegionClass(player.region)}`}>{player.region}</p>
             <a
               href={`https://namemc.com/profile/${player.name}`}
