@@ -386,7 +386,8 @@
   overflow: hidden;
 }
 
-.boardTabs .modeTabs {
+.boardTabs .modeTabs,
+.boardTabs .regionTabs {
   max-width: 100%;
   border-radius: 16px 16px 0 0;
   border-bottom-color: rgba(255, 255, 255, 0.08);
