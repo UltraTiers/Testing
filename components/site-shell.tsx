@@ -8,7 +8,6 @@ import styles from "./site-shell.module.css";
 
 type SiteShellProps = {
   initialPlayers?: Player[];
-  isDocsPage?: boolean;
   docsContent?: React.ReactNode;
 };
 
@@ -235,7 +234,7 @@ function useDebouncedValue(value: string, delay: number) {
 }
 
 
-export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent }: SiteShellProps) {
+export function SiteShell({ initialPlayers = [], docsContent }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isLoading, setIsLoading] = useState(initialPlayers.length === 0);
   const [loadError, setLoadError] = useState("");
@@ -617,7 +616,7 @@ export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent
                 ) : (
                   <Globe size={15} aria-hidden="true" className={styles.regionTabIcon} />
                 )}
-                <span className={styles.regionLabel}>{region === "combined" ? "Overall" : region}</span>
+                <span className={styles.regionLabel}>{region === "combined" ? "Points" : region}</span>
               </button>
             ))}
           </div>
@@ -648,7 +647,7 @@ export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent
                   <span className={styles.modeIcon}>
                     <img src={getModeIconPath(mode)} alt="" className={styles.modeIconImage} />
                   </span>
-                  <span className={styles.modeLabel}>{mode === "all" ? "Overall" : mode}</span>
+                  <span className={styles.modeLabel}>{mode === "all" ? "Points" : mode}</span>
                 </button>
               );
             })}
@@ -656,8 +655,12 @@ export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent
         )}
       </section>
 
-      {isDocsPage && docsContent ? (
-        <section className={`glass ${styles.board}`}>{docsContent}</section>
+      {pendingGroup === "docs" && docsContent ? (
+        <section className={`glass ${styles.board}`}>
+          <div className={styles.boardContent}>
+            {docsContent}
+          </div>
+        </section>
       ) : (
         <section className={`glass ${styles.board}`}> 
         {showInitialLoading ? (
@@ -946,7 +949,7 @@ function LegacyPlayerModal({
             <div className={`${styles.rankBadge} ${styles.rankGold}`}>{rank > 0 ? rank : "#"}</div>
             <div className={styles.modalPositionText}>
               <img src="/Trophy_Icon.png" alt="" className={styles.modalPositionIcon} />
-              <span>Overall</span>
+              <span>Points</span>
               <small>({topPlacement} points)</small>
             </div>
           </div>

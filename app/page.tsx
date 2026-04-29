@@ -1,8 +1,31 @@
 import { SiteShell } from "@/components/site-shell";
 import { fetchPlayers } from "@/lib/api";
+import { DocsContent } from "@/components/docs-content";
 
 export default async function Home() {
   const players = await fetchPlayers();
 
-  return <SiteShell initialPlayers={players} />;
+  // Calculate tested players stats
+  const totalPlayers = players.length;
+  const playersWithTiers = players.filter(p => p.tiers.length > 0).length;
+  const uniqueTiers = new Set(players.flatMap(p => p.tiers.map(t => t.tier))).size;
+  
+  // Count players by tier
+  const tierCounts: Record<string, number> = {};
+  players.forEach(player => {
+    player.tiers.forEach(tier => {
+      tierCounts[tier.tier] = (tierCounts[tier.tier] || 0) + 1;
+    });
+  });
+
+  const docsContent = (
+    <DocsContent 
+      totalPlayers={totalPlayers}
+      playersWithTiers={playersWithTiers}
+      uniqueTiers={uniqueTiers}
+      tierCounts={tierCounts}
+    />
+  );
+
+  return <SiteShell initialPlayers={players} docsContent={docsContent} />;
 }
