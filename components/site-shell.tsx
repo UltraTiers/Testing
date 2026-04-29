@@ -2,8 +2,6 @@
 
 import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { fetchPlayers, type Player, type PlayerTier } from "@/lib/api";
 import { groupLabels, modeGroups, type ModeGroupKey, tierScores } from "@/lib/modes";
 import styles from "./site-shell.module.css";
@@ -234,18 +232,6 @@ function useDebouncedValue(value: string, delay: number) {
   }, [delay, value]);
 
   return debouncedValue;
-}
-
-// DocsTabActive component for navigation highlighting
-function DocsTabActive() {
-  const pathname = usePathname();
-  const isActive = pathname === "/docs";
-  return (
-    <Link href="/docs" className={`${styles.groupTab} ${isActive ? styles.groupTabActive : ""}`}>
-      <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: 7}}><rect width="16" height="16" rx="3" fill="currentColor" opacity="0.13"/><path d="M5.5 4.5h5M5.5 7.5h5M5.5 10.5h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-      Docs
-    </Link>
-  );
 }
 
 
@@ -595,7 +581,6 @@ export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent
                 {groupLabels[group]}
               </button>
             ))}
-            <DocsTabActive />
           </div>
         </section>
       </nav>

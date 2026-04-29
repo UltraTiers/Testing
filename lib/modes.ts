@@ -62,6 +62,7 @@ export const modeGroups = {
   ],
   extra: ["AxePot", "Pufferfish", "OP", "Spear Mace", "Spear Elytra"],
   bonus: ["Bridge", "Pearl", "Sumo"],
+  docs: [],
 } as const;
 
 export type ModeGroupKey = keyof typeof modeGroups;
@@ -72,6 +73,7 @@ export const groupLabels: Record<ModeGroupKey, string> = {
   sub: "Sub Modes",
   extra: "Extra Modes",
   bonus: "Bonus Modes",
+  docs: "Docs",
 };
 
 export const allModes = Array.from(new Set(Object.values(modeGroups).flat()));
