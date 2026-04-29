@@ -236,6 +236,18 @@ function useDebouncedValue(value: string, delay: number) {
   return debouncedValue;
 }
 
+// DocsTabActive component for navigation highlighting
+function DocsTabActive() {
+  const pathname = usePathname();
+  const isActive = pathname === "/docs";
+  return (
+    <Link href="/docs" className={`${styles.groupTab} ${isActive ? styles.groupTabActive : ""}`}>
+      <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: 7}}><rect width="16" height="16" rx="3" fill="currentColor" opacity="0.13"/><path d="M5.5 4.5h5M5.5 7.5h5M5.5 10.5h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+      Docs
+    </Link>
+  );
+}
+
 
 export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
@@ -586,25 +598,6 @@ export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent
             <DocsTabActive />
           </div>
         </section>
-      // DocsTabActive component for navigation highlighting
-      function DocsTabActive() {
-        const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-        // If running in SSR/SSG, fallback to usePathname hook
-        // (Next.js 13+ app router)
-        // If not available, fallback to window.location
-        // This ensures highlighting works in both SSR and client
-        // If you use Next.js 13+, you can use usePathname directly
-        // const pathname = usePathname();
-        const isActive = pathname === "/docs";
-        return (
-          <Link href="/docs" legacyBehavior>
-            <a className={`${styles.groupTab} ${isActive ? styles.groupTabActive : ""}`}>
-              <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: 7}}><rect width="16" height="16" rx="3" fill="currentColor" opacity="0.13"/><path d="M5.5 4.5h5M5.5 7.5h5M5.5 10.5h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-              Docs
-            </a>
-          </Link>
-        );
-      }
       </nav>
 
 
