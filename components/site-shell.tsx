@@ -1,13 +1,15 @@
 "use client";
 
 import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X } from "lucide-react";
+import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X, FileText } from "lucide-react";
 import { fetchPlayers, type Player, type PlayerTier } from "@/lib/api";
 import { groupLabels, modeGroups, type ModeGroupKey, tierScores } from "@/lib/modes";
 import styles from "./site-shell.module.css";
 
 type SiteShellProps = {
   initialPlayers?: Player[];
+  isDocsPage?: boolean;
+  docsContent?: React.ReactNode;
 };
 
 type ModeFilter = "all" | string;
@@ -233,7 +235,7 @@ function useDebouncedValue(value: string, delay: number) {
 }
 
 
-export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
+export function SiteShell({ initialPlayers = [], isDocsPage = false, docsContent }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isLoading, setIsLoading] = useState(initialPlayers.length === 0);
   const [loadError, setLoadError] = useState("");
@@ -579,9 +581,9 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
                 {groupLabels[group]}
               </button>
             ))}
-            <a href="https://store.ultrapvp.net" target="_blank" rel="noreferrer" className={styles.groupTab}>
-              <ShoppingBag size={16} aria-hidden="true" />
-              Store
+            <a href="/docs" className={styles.groupTab}>
+              <FileText size={16} aria-hidden="true" />
+              Docs
             </a>
           </div>
         </section>
@@ -658,7 +660,12 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
         )}
       </section>
 
-      <section className={`glass ${styles.board}`}>
+      {isDocsPage && docsContent ? (
+        <div className="docs-content">
+          {docsContent}
+        </div>
+      ) : (
+        <section className={`glass ${styles.board}`}>
         {showInitialLoading ? (
           <div className={styles.loadingState}>
             <Loader2 size={22} aria-hidden="true" className={styles.loadingSpinner} />
@@ -775,7 +782,7 @@ export function SiteShell({ initialPlayers = [] }: SiteShellProps) {
 
         {!showInitialLoading && rankedPlayers.length === 0 ? <div className={styles.empty}>Nothing matched the current search and filters.</div> : null}
       </section>
-
+      )}
       {selectedPlayer ? (
         <Suspense fallback={null}>
           <PlayerModal
