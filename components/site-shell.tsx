@@ -8,6 +8,7 @@ import styles from "./site-shell.module.css";
 
 type SiteShellProps = {
   initialPlayers?: Player[];
+  isDocsPage?: boolean;
   docsContent?: React.ReactNode;
 };
 
