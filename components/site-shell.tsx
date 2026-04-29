@@ -816,7 +816,13 @@ function TierColumns({
           player,
           tier: getIndexedPlayerTier(playerIndexes, player, mode).tier,
         }))
-        .filter(({ tier }) => getTierNumber(tier) === tierNumber.toString())
+        .filter(({ player, tier }) => {
+          // Exclude players retired in this specific mode
+          if (player.retired_modes?.includes(mode)) {
+            return false;
+          }
+          return getTierNumber(tier) === tierNumber.toString();
+        })
         .sort((left, right) => {
           const tierDiff = (tierScores[right.tier] ?? 0) - (tierScores[left.tier] ?? 0);
           if (tierDiff !== 0) {
