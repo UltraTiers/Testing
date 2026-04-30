@@ -6,11 +6,10 @@ import { tierScores, modeGroups } from "@/lib/modes";
 interface DocsContentProps {
   totalPlayers: number;
   playersWithTiers: number;
-  uniqueTiers: number;
   tierCounts: Record<string, number>;
 }
 
-export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierCounts }: DocsContentProps) {
+export function DocsContent({ totalPlayers, playersWithTiers, tierCounts }: DocsContentProps) {
   const tierEntries = useMemo(() => 
     Object.entries(tierScores).filter(([key]) => key !== "Unknown"),
     []
@@ -18,14 +17,11 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
 
   return (
     <div className="docs-container">
-      <header className="docs-header">
-        <h1>UltraTiers Documentation</h1>
-      </header>
 
       <section className="docs-section">
         <h2>How the Point System Works</h2>
         <p>
-          UltraTiers tracks player rankings across {Object.values(modeGroups).flat().length} different game modes. 
+          UltraTiers tracks player rankings across 28 different game modes. 
           Each tier assignment earns points based on the difficulty and prestige of achieving that rank.
         </p>
         
@@ -68,23 +64,6 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
       </section>
 
       <section className="docs-section">
-        <h2>Game Mode Categories</h2>
-        <div className="mode-categories">
-          {Object.entries(modeGroups)
-            .filter(([key]) => key !== "docs")
-            .map(([key, modes]) => (
-              <div key={key} className="category-card">
-                <h3>
-                  {key === "global" ? "All Modes" : key.charAt(0).toUpperCase() + key.slice(1) + " Modes"}
-                </h3>
-                <p>{modes.join(", ")}</p>
-                <span className="category-count">{modes.length} modes</span>
-              </div>
-            ))}
-        </div>
-      </section>
-
-      <section className="docs-section">
         <h2>Tested Players Statistics</h2>
         <div className="stats-grid">
           <div className="stat-card">
@@ -93,14 +72,14 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
           </div>
           <div className="stat-card">
             <div className="stat-value">{playersWithTiers.toLocaleString()}</div>
-            <div className="stat-label">Ranked Players</div>
+            <div className="stat-label">Tested Tiers</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value">{uniqueTiers}</div>
+            <div className="stat-value">10</div>
             <div className="stat-label">Tier Types</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value">{Object.values(modeGroups).flat().length}</div>
+            <div className="stat-value">28</div>
             <div className="stat-label">Game Modes</div>
           </div>
         </div>
@@ -111,7 +90,7 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
             {Object.entries(tierCounts)
               .filter(([tier]) => tier !== "Unknown" && tier !== "Unranked")
               .sort(([a], [b]) => {
-                const order = ["LT5", "LT4", "LT3", "LT2", "LT1", "HT1", "HT2", "HT3", "HT4", "HT5"];
+                const order = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
                 return order.indexOf(a) - order.indexOf(b);
               })
               .map(([tier, count]) => {

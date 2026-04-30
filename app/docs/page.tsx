@@ -7,7 +7,6 @@ export default async function DocsPage() {
   // Calculate tested players stats
   const totalPlayers = players.length;
   const playersWithTiers = players.filter(p => p.tiers.length > 0).length;
-  const uniqueTiers = new Set(players.flatMap(p => p.tiers.map(t => t.tier))).size;
   
   // Count players by tier
   const tierCounts: Record<string, number> = {};
@@ -20,11 +19,6 @@ export default async function DocsPage() {
   const docsContent = (
     <>
       <div className="docs-container">
-        <header className="docs-header">
-          <h1>UltraTiers Documentation</h1>
-          <p className="docs-subtitle">Understanding the Point System & Ranking</p>
-        </header>
-
         <section className="docs-section">
           <h2>How the Point System Works</h2>
           <p>
@@ -33,7 +27,7 @@ export default async function DocsPage() {
           </p>
           
           <div className="point-system-grid">
-            <div className="point-card high-tier">
+            <div className="point-card">
               <div className="point-header">HT1 - Highest Tier</div>
               <div className="point-value">60 pts</div>
               <div className="point-bar" style={{width: '100%'}}></div>
@@ -115,45 +109,19 @@ export default async function DocsPage() {
         </section>
 
         <section className="docs-section">
-          <h2>Game Mode Categories</h2>
-          <div className="mode-categories">
-            <div className="category-card">
-              <h3>Main Modes</h3>
-              <p>Sword, Axe, Vanilla, Pot, NethOP, UHC, SMP, Mace</p>
-              <span className="category-count">8 modes</span>
-            </div>
-            <div className="category-card">
-              <h3>Sub Modes</h3>
-              <p>Speed, Creeper, Elytra, Minecart, Trident, Diamond Survival, Diamond SMP, OG Vanilla, DeBuff, Bed, Bow, Manhunt</p>
-              <span className="category-count">12 modes</span>
-            </div>
-            <div className="category-card">
-              <h3>Extra Modes</h3>
-              <p>AxePot, Pufferfish, OP, Spear Mace, Spear Elytra</p>
-              <span className="category-count">5 modes</span>
-            </div>
-            <div className="category-card">
-              <h3>Bonus Modes</h3>
-              <p>Bridge, Pearl, Sumo</p>
-              <span className="category-count">3 modes</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="docs-section">
           <h2>Tested Players Statistics</h2>
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-value">{totalPlayers.toLocaleString()}</div>
-              <div className="stat-label">Total Players Tracked</div>
+              <div className="stat-label">Total Players</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">{playersWithTiers.toLocaleString()}</div>
-              <div className="stat-label">Players with Rankings</div>
+              <div className="stat-label">Tested Tiers</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">{uniqueTiers}</div>
-              <div className="stat-label">Unique Tier Types</div>
+              <div className="stat-value">10</div>
+              <div className="stat-label">Tier Types</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">28</div>
@@ -165,46 +133,28 @@ export default async function DocsPage() {
             <h3>Tier Distribution</h3>
             <div className="distribution-bars">
               {Object.entries(tierCounts)
-                .sort(([,a], [,b]) => b - a)
-                .slice(0, 10)
-                .map(([tier, count]) => (
-                  <div key={tier} className="distribution-row">
-                    <span className="distribution-tier">{tier}</span>
-                    <div className="distribution-bar-container">
-                      <div 
-                        className="distribution-bar" 
-                        style={{width: `${Math.min(100, (count / Math.max(...Object.values(tierCounts))) * 100)}%`}}
-                      ></div>
+                .filter(([tier]) => tier !== "Unknown" && tier !== "Unranked")
+                .sort(([a], [b]) => {
+                  const order = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
+                  return order.indexOf(a) - order.indexOf(b);
+                })
+                .map(([tier, count]) => {
+                  const validTiers = Object.keys(tierCounts).filter(t => t !== "Unknown" && t !== "Unranked");
+                  const maxCount = Math.max(...validTiers.map(t => tierCounts[t]));
+                  return (
+                    <div key={tier} className="distribution-row">
+                      <span className="distribution-tier">{tier}</span>
+                      <div className="distribution-bar-container">
+                        <div 
+                          className="distribution-bar" 
+                          style={{width: `${(count / maxCount) * 100}%`}}
+                        ></div>
+                      </div>
+                      <span className="distribution-count">{count}</span>
                     </div>
-                    <span className="distribution-count">{count}</span>
-                  </div>
-                ))}
+                  );
+                })}
             </div>
-          </div>
-        </section>
-
-        <section className="docs-section">
-          <h2>Global Rankings</h2>
-          <p>
-            The Global tab combines points from all 28 game modes to create an overall leaderboard.
-            Players can also filter by region: EU, NA, SA, AS, AU, AF, ME, and Other.
-          </p>
-        </section>
-
-        <section className="docs-section">
-          <h2>About UltraTiers</h2>
-          <p>
-            UltraTiers is a comprehensive ranking system for UltraPVP network players. 
-            It tracks player performance across all game modes and provides a unified point system 
-            to compare overall skill and dedication across the network.
-          </p>
-          <div className="about-links">
-            <a href="https://store.ultrapvp.net" target="_blank" rel="noreferrer" className="docs-link">
-              Visit UltraPVP Store
-            </a>
-            <a href="https://ultrapvp.net" target="_blank" rel="noreferrer" className="docs-link">
-              Main Website
-            </a>
           </div>
         </section>
       </div>
