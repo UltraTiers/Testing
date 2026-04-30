@@ -123,6 +123,36 @@ input {
   padding: 40px 24px;
 }
 
+.docs-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+
+.docs-tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.docs-tab:hover {
+  color: var(--text);
+}
+
+.docs-tab.active {
+  color: var(--main);
+  border-bottom-color: var(--main);
+}
+
 .docs-header {
   text-align: center;
   margin-bottom: 48px;
@@ -136,7 +166,7 @@ input {
 }
 
 .docs-section {
-  background: var(--panel-strong);
+  background: rgba(18, 17, 25, 0.54);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 32px;

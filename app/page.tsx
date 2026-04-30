@@ -7,7 +7,7 @@ export default async function Home() {
 
   // Calculate tested players stats
   const totalPlayers = players.length;
-  const playersWithTiers = players.filter(p => p.tiers.length > 0).length;
+  const testedTiers = players.reduce((sum, p) => sum + p.tiers.length, 0);
   
   // Count players by tier
   const tierCounts: Record<string, number> = {};
@@ -20,7 +20,7 @@ export default async function Home() {
   const docsContent = (
     <DocsContent 
       totalPlayers={totalPlayers}
-      playersWithTiers={playersWithTiers}
+      testedTiers={testedTiers}
       tierCounts={tierCounts}
     />
   );
