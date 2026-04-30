@@ -102,7 +102,7 @@ export function DocsContent({ totalPlayers, testedTiers, tierCounts, activeTab =
                   style={{width: `${(points / 60) * 100}%`}}
                 ></div>
                 <div className="point-desc">
-                  {tier.startsWith("HT") ? "Top position in gamemode" : "Leaderboard rank"}
+                  {tier.startsWith("HT") ? "Leaderboard rank" : "Leaderboard rank"}
                 </div>
               </div>
             ))}
