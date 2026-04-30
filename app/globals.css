@@ -135,12 +135,6 @@ input {
   color: var(--text);
 }
 
-.docs-subtitle {
-  font-size: 1.1rem;
-  color: var(--muted);
-  margin: 0;
-}
-
 .docs-section {
   background: var(--panel-strong);
   border: 1px solid var(--border);
@@ -178,11 +172,6 @@ input {
 .point-card:hover {
   transform: translateY(-2px);
   border-color: var(--main);
-}
-
-.point-card-high-tier {
-  border-color: var(--gold);
-  background: var(--panel-strong);
 }
 
 .point-header {
@@ -363,24 +352,4 @@ input {
   text-align: right;
   font-size: 0.9rem;
   color: var(--muted);
-}
-
-.about-links {
-  display: flex;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.docs-link {
-  display: inline-block;
-  padding: 12px 24px;
-  background: var(--main);
-  border-radius: 8px;
-  font-weight: 600;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.docs-link:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
 }

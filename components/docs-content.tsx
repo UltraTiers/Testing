@@ -20,7 +20,6 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
     <div className="docs-container">
       <header className="docs-header">
         <h1>UltraTiers Documentation</h1>
-        <p className="docs-subtitle">Understanding the Point System & Ranking</p>
       </header>
 
       <section className="docs-section">
@@ -34,7 +33,7 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
           {tierEntries.map(([tier, points]) => (
             <div 
               key={tier} 
-              className={`point-card ${tier === "HT1" ? "point-card-high-tier" : ""}`}
+              className="point-card"
             >
               <div className="point-header">{tier}</div>
               <div className="point-value">{points} pts</div>
@@ -110,10 +109,14 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
           <h3>Tier Distribution</h3>
           <div className="distribution-bars">
             {Object.entries(tierCounts)
-              .sort(([,a], [,b]) => b - a)
-              .slice(0, 10)
+              .filter(([tier]) => tier !== "Unknown" && tier !== "Unranked")
+              .sort(([a], [b]) => {
+                const order = ["LT5", "LT4", "LT3", "LT2", "LT1", "HT1", "HT2", "HT3", "HT4", "HT5"];
+                return order.indexOf(a) - order.indexOf(b);
+              })
               .map(([tier, count]) => {
-                const maxCount = Math.max(...Object.values(tierCounts));
+                const validTiers = Object.keys(tierCounts).filter(t => t !== "Unknown" && t !== "Unranked");
+                const maxCount = Math.max(...validTiers.map(t => tierCounts[t]));
                 return (
                   <div key={tier} className="distribution-row">
                     <span className="distribution-tier">{tier}</span>
@@ -138,14 +141,6 @@ export function DocsContent({ totalPlayers, playersWithTiers, uniqueTiers, tierC
           It tracks player performance across all game modes and provides a unified point system 
           to compare overall skill and dedication across the network.
         </p>
-        <div className="about-links">
-          <a href="https://store.ultrapvp.net" target="_blank" rel="noreferrer" className="docs-link">
-            UltraPVP Store
-          </a>
-          <a href="https://ultrapvp.net" target="_blank" rel="noreferrer" className="docs-link">
-            Main Website
-          </a>
-        </div>
       </section>
     </div>
   );
