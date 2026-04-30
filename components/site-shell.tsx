@@ -597,28 +597,34 @@ export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDo
       <section className={styles.boardTabs}>
         {/* For docs page, show docs tabs */}
         {pendingGroup === "docs" ? (
-          <div className={styles.docsTabs}>
-            <button
-              type="button"
-              onClick={() => setDocsTab("about")}
-              className={`${styles.docsTab} ${docsTab === "about" ? styles.docsTabActive : ""}`}
-            >
-              About
-            </button>
-            <button
-              type="button"
-              onClick={() => setDocsTab("stats")}
-              className={`${styles.docsTab} ${docsTab === "stats" ? styles.docsTabActive : ""}`}
-            >
-              Stats
-            </button>
-            <button
-              type="button"
-              onClick={() => setDocsTab("points")}
-              className={`${styles.docsTab} ${docsTab === "points" ? styles.docsTabActive : ""}`}
-            >
-              Points
-            </button>
+          <div
+            className={styles.modeTabs}
+            style={{
+              '--tab-count': 3,
+              '--tab-width': '112px',
+              '--tab-gap': '3px',
+            } as React.CSSProperties}
+          >
+            <span
+              className={styles.modeTabSlider}
+              style={{
+                left: `calc(4px + ${['about', 'stats', 'points'].indexOf(docsTab) * (112 + 3)}px)`
+              }}
+              aria-hidden="true"
+            />
+            {['about', 'stats', 'points'].map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setDocsTab(tab as 'about' | 'stats' | 'points')}
+                className={
+                  styles.modeTab +
+                  (docsTab === tab ? ' ' + styles.modeTabActive : '')
+                }
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </div>
         ) : pendingGroup === "global" ? (
           <div
