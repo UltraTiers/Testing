@@ -596,16 +596,20 @@ export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDo
         {/* For docs page, show docs tabs */}
         {pendingGroup === "docs" ? (
           <div
-            key={docsTab}
             className={styles.modeTabs}
             style={{
               '--tab-count': 3,
               '--tab-width': '112px',
               '--tab-gap': '3px',
-              '--active-index': ['about', 'stats', 'points'].indexOf(docsTab),
             } as React.CSSProperties}
           >
-            <span className={styles.modeTabSlider} aria-hidden="true" />
+            <span
+              className={styles.modeTabSlider}
+              style={{
+                transform: `translateX(${['about', 'stats', 'points'].indexOf(docsTab) * 115}px)`
+              }}
+              aria-hidden="true"
+            />
             {[
               { id: 'about', label: 'About', icon: FileText },
               { id: 'stats', label: 'Stats', icon: BarChart3 },
