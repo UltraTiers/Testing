@@ -132,10 +132,7 @@ input {
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 12px 0;
-  background: linear-gradient(135deg, var(--main) 0%, var(--secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
 }
 
 .docs-subtitle {
@@ -145,8 +142,7 @@ input {
 }
 
 .docs-section {
-  background: var(--panel);
-  backdrop-filter: blur(18px);
+  background: var(--panel-strong);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 32px;
@@ -184,9 +180,9 @@ input {
   border-color: var(--main);
 }
 
-.point-card.high-tier {
+.point-card-high-tier {
   border-color: var(--gold);
-  background: linear-gradient(135deg, rgba(249, 198, 92, 0.1) 0%, var(--panel-strong) 100%);
+  background: var(--panel-strong);
 }
 
 .point-header {
@@ -205,7 +201,7 @@ input {
 
 .point-bar {
   height: 6px;
-  background: linear-gradient(90deg, var(--main) 0%, var(--secondary) 100%);
+  background: var(--main);
   border-radius: 3px;
   margin-bottom: 8px;
 }
@@ -240,7 +236,7 @@ input {
 }
 
 .tier-label.ht {
-  background: linear-gradient(135deg, rgba(166, 71, 255, 0.2) 0%, rgba(231, 110, 255, 0.2) 100%);
+  background: rgba(166, 71, 255, 0.2);
   color: var(--main);
 }
 
@@ -357,7 +353,7 @@ input {
 
 .distribution-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--main) 0%, var(--secondary) 100%);
+  background: var(--main);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -378,7 +374,7 @@ input {
 .docs-link {
   display: inline-block;
   padding: 12px 24px;
-  background: linear-gradient(135deg, var(--main) 0%, var(--secondary) 100%);
+  background: var(--main);
   border-radius: 8px;
   font-weight: 600;
   transition: transform 0.2s ease, opacity 0.2s ease;
