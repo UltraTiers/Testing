@@ -22,9 +22,9 @@ export function DocsContent({ totalPlayers, testedTiers, tierCounts, activeTab =
         <section className="docs-section">
           <h2>About UltraTiers</h2>
           <p>
-            UltraTiers is a comprehensive ranking system for UltraPVP network players. 
-            It tracks player performance across all game modes and provides a unified point system 
-            to compare overall skill and dedication across the network.
+            UltraTiers is a ranking system made to show how good players are at Minecraft PvP. 
+            It tracks how players perform across different PvP modes and gives them points based on their skill and consistency. 
+            This creates a clear tierlist that shows who the best players are in each mode and catagory.
           </p>
         </section>
       )}
