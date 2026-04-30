@@ -1,4 +1,5 @@
 import { SiteShell } from "@/components/site-shell";
+import { DocsContent } from "@/components/docs-content";
 import { fetchPlayers } from "@/lib/api";
 
 export default async function DocsPage() {
@@ -17,24 +18,12 @@ export default async function DocsPage() {
   });
 
   const docsContent = (
-    <>
-      <div className="docs-container">
-        <div className="docs-tabs">
-          <button className="docs-tab active">About</button>
-          <button className="docs-tab">Stats</button>
-          <button className="docs-tab">Points</button>
-        </div>
-
-        <section className="docs-section">
-          <h2>About UltraTiers</h2>
-          <p>
-            UltraTiers is a comprehensive ranking system for UltraPVP network players. 
-            It tracks player performance across all game modes and provides a unified point system 
-            to compare overall skill and dedication across the network.
-          </p>
-        </section>
-      </div>
-    </>
+    <DocsContent 
+      totalPlayers={totalPlayers}
+      testedTiers={testedTiers}
+      tierCounts={tierCounts}
+      activeTab="about"
+    />
   );
 
   return <SiteShell initialPlayers={players} isDocsPage={true} docsContent={docsContent} />;

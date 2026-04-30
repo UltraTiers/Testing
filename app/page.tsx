@@ -22,6 +22,7 @@ export default async function Home() {
       totalPlayers={totalPlayers}
       testedTiers={testedTiers}
       tierCounts={tierCounts}
+      activeTab="about"
     />
   );
 

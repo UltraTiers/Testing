@@ -1,17 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { tierScores } from "@/lib/modes";
 
 interface DocsContentProps {
   totalPlayers: number;
   testedTiers: number;
   tierCounts: Record<string, number>;
+  activeTab?: "about" | "stats" | "points";
 }
 
-export function DocsContent({ totalPlayers, testedTiers, tierCounts }: DocsContentProps) {
-  const [activeTab, setActiveTab] = useState<"about" | "stats" | "points">("about");
-  
+export function DocsContent({ totalPlayers, testedTiers, tierCounts, activeTab = "about" }: DocsContentProps) {
   const tierEntries = useMemo(() => 
     Object.entries(tierScores).filter(([key]) => key !== "Unknown"),
     []
@@ -19,27 +18,6 @@ export function DocsContent({ totalPlayers, testedTiers, tierCounts }: DocsConte
 
   return (
     <div className="docs-container">
-      <div className="docs-tabs">
-        <button 
-          className={`docs-tab ${activeTab === "about" ? "active" : ""}`}
-          onClick={() => setActiveTab("about")}
-        >
-          About
-        </button>
-        <button 
-          className={`docs-tab ${activeTab === "stats" ? "active" : ""}`}
-          onClick={() => setActiveTab("stats")}
-        >
-          Stats
-        </button>
-        <button 
-          className={`docs-tab ${activeTab === "points" ? "active" : ""}`}
-          onClick={() => setActiveTab("points")}
-        >
-          Points
-        </button>
-      </div>
-
       {activeTab === "about" && (
         <section className="docs-section">
           <h2>About UltraTiers</h2>

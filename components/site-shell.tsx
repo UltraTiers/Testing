@@ -10,6 +10,8 @@ type SiteShellProps = {
   initialPlayers?: Player[];
   isDocsPage?: boolean;
   docsContent?: React.ReactNode;
+  docsTab?: "about" | "stats" | "points";
+  onDocsTabChange?: (tab: "about" | "stats" | "points") => void;
 };
 
 type ModeFilter = "all" | string;
@@ -235,7 +237,7 @@ function useDebouncedValue(value: string, delay: number) {
 }
 
 
-export function SiteShell({ initialPlayers = [], docsContent }: SiteShellProps) {
+export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDocsTab = "about", onDocsTabChange }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isLoading, setIsLoading] = useState(initialPlayers.length === 0);
   const [loadError, setLoadError] = useState("");
@@ -250,6 +252,12 @@ export function SiteShell({ initialPlayers = [], docsContent }: SiteShellProps) 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [visibleRows, setVisibleRows] = useState(rowBatchSize);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [docsTab, setDocsTabInternal] = useState<"about" | "stats" | "points">(initialDocsTab);
+  
+  const setDocsTab = (tab: "about" | "stats" | "points") => {
+    setDocsTabInternal(tab);
+    onDocsTabChange?.(tab);
+  };
   const switchTimeout = useRef<number | null>(null);
   const loadAttempts = useRef<number[]>([]);
   const revealTimeout = useRef<number | null>(null);
@@ -587,8 +595,32 @@ export function SiteShell({ initialPlayers = [], docsContent }: SiteShellProps) 
 
 
       <section className={styles.boardTabs}>
-        {/* For Global tab, show region selector in place of mode buttons */}
-        {pendingGroup === "global" ? (
+        {/* For docs page, show docs tabs */}
+        {pendingGroup === "docs" ? (
+          <div className={styles.docsTabs}>
+            <button
+              type="button"
+              onClick={() => setDocsTab("about")}
+              className={`${styles.docsTab} ${docsTab === "about" ? styles.docsTabActive : ""}`}
+            >
+              About
+            </button>
+            <button
+              type="button"
+              onClick={() => setDocsTab("stats")}
+              className={`${styles.docsTab} ${docsTab === "stats" ? styles.docsTabActive : ""}`}
+            >
+              Stats
+            </button>
+            <button
+              type="button"
+              onClick={() => setDocsTab("points")}
+              className={`${styles.docsTab} ${docsTab === "points" ? styles.docsTabActive : ""}`}
+            >
+              Points
+            </button>
+          </div>
+        ) : pendingGroup === "global" ? (
           <div
             className={styles.regionTabs}
             style={
