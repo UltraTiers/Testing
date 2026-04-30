@@ -17,14 +17,18 @@ export default async function DocsPage() {
     });
   });
 
-  const docsContent = (
-    <DocsContent 
-      totalPlayers={totalPlayers}
-      testedTiers={testedTiers}
-      tierCounts={tierCounts}
-      activeTab="about"
+  return (
+    <SiteShell 
+      initialPlayers={players} 
+      isDocsPage={true} 
+      docsTab="about"
+      docsContent={
+        <DocsContent 
+          totalPlayers={totalPlayers}
+          testedTiers={testedTiers}
+          tierCounts={tierCounts}
+        />
+      }
     />
   );
-
-  return <SiteShell initialPlayers={players} isDocsPage={true} docsContent={docsContent} />;
 }

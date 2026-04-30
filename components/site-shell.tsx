@@ -1,7 +1,7 @@
 "use client";
 
-import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X } from "lucide-react";
+import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState, cloneElement } from "react";
+import { ChevronUp, ChevronsUp, Globe, Loader2, Search, ShoppingBag, Trophy, X, FileText, BarChart3, Award } from "lucide-react";
 import { fetchPlayers, type Player, type PlayerTier } from "@/lib/api";
 import { groupLabels, modeGroups, type ModeGroupKey, tierScores } from "@/lib/modes";
 import styles from "./site-shell.module.css";
@@ -11,7 +11,6 @@ type SiteShellProps = {
   isDocsPage?: boolean;
   docsContent?: React.ReactNode;
   docsTab?: "about" | "stats" | "points";
-  onDocsTabChange?: (tab: "about" | "stats" | "points") => void;
 };
 
 type ModeFilter = "all" | string;
@@ -237,7 +236,7 @@ function useDebouncedValue(value: string, delay: number) {
 }
 
 
-export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDocsTab = "about", onDocsTabChange }: SiteShellProps) {
+export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDocsTab = "about" }: SiteShellProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isLoading, setIsLoading] = useState(initialPlayers.length === 0);
   const [loadError, setLoadError] = useState("");
@@ -256,7 +255,6 @@ export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDo
   
   const setDocsTab = (tab: "about" | "stats" | "points") => {
     setDocsTabInternal(tab);
-    onDocsTabChange?.(tab);
   };
   const switchTimeout = useRef<number | null>(null);
   const loadAttempts = useRef<number[]>([]);
@@ -612,17 +610,22 @@ export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDo
               }}
               aria-hidden="true"
             />
-            {['about', 'stats', 'points'].map((tab) => (
+            {[
+              { id: 'about', label: 'About', icon: FileText },
+              { id: 'stats', label: 'Stats', icon: BarChart3 },
+              { id: 'points', label: 'Points', icon: Award },
+            ].map((tab) => (
               <button
-                key={tab}
+                key={tab.id}
                 type="button"
-                onClick={() => setDocsTab(tab as 'about' | 'stats' | 'points')}
+                onClick={() => setDocsTab(tab.id as 'about' | 'stats' | 'points')}
                 className={
                   styles.modeTab +
-                  (docsTab === tab ? ' ' + styles.modeTabActive : '')
+                  (docsTab === tab.id ? ' ' + styles.modeTabActive : '')
                 }
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                <tab.icon size={15} aria-hidden="true" className={styles.modeTabIcon} />
+                {tab.label}
               </button>
             ))}
           </div>
@@ -697,7 +700,7 @@ export function SiteShell({ initialPlayers = [], docsContent, docsTab: initialDo
       {pendingGroup === "docs" && docsContent ? (
         <section className={`glass ${styles.board}`}>
           <div className={styles.boardContent}>
-            {docsContent}
+            {cloneElement(docsContent as React.ReactElement<{ activeTab?: string }>, { activeTab: docsTab })}
           </div>
         </section>
       ) : (
